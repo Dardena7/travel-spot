@@ -33,10 +33,11 @@ export class PostService {
 		return this._postSubject;
     }
     
-    public fetchPosts(): void
+    public fetchPosts(currentAmount: number): void
     {
+        const queryParams = `?currentAmount=${currentAmount}`;
         this.loadSubject.next(true);
-        this.http.get<{message:string, posts: any[]}>("http://localhost:3000/api/posts")
+        this.http.get<{message:string, posts: any[]}>("http://localhost:3000/api/posts"+queryParams)
         .pipe(
             catchError(err => {
                 return throwError(err);
@@ -62,7 +63,7 @@ export class PostService {
         .subscribe(
             posts => {
                 setTimeout(() => {
-                    this._posts = posts;
+                    this._posts = this._posts.concat(posts);
                     this.postsSubject.next(this._posts.slice());
                     this.loadSubject.next(false);
                 }, 1000)
@@ -94,7 +95,7 @@ export class PostService {
                     response.postPicture,
                     description
                 ); 
-                this._posts.push(post);
+                this._posts.unshift(post);
                 this._postsSubject.next(this._posts.slice());
             }
         );
@@ -125,7 +126,7 @@ export class PostService {
         postData.append("city",city);
         postData.append("picture",picture);
         postData.append("description",description);
-        
+
         this.http.put<{message:string, postPicture:string}>("http://localhost:3000/api/posts", postData)
         .pipe(
             catchError(err => {

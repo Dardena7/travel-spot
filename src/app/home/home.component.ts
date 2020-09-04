@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { AuthService } from '../services/auth/auth.service';
 import { PostService } from '../services/post.service';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
 
   form: FormGroup;
   imagePreview: string;
+  hasChanged: boolean;
 
   user: User = null;
   private userSub: Subscription;
@@ -43,9 +44,12 @@ export class HomeComponent implements OnInit {
     );
     
     this.postsSub = this.postService.postsSubject.subscribe(
-      posts => { this.posts = posts.reverse(); }
+      posts => { 
+        this.hasChanged = this.posts.length != posts.length;
+        this.posts = posts; 
+      }
     );
-    this.postService.fetchPosts();
+    this.postService.fetchPosts(this.posts.length);
 
     this.form = new FormGroup({
       country : new FormControl(null, {validators: [Validators.required]}),
@@ -104,6 +108,14 @@ export class HomeComponent implements OnInit {
   onEdit(id: string)
   {
     this.router.navigate(['/edit-post', id]);
+  }
+
+  @HostListener("window:scroll", [])
+  onScroll(): void {
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 100) {
+      if (!this.loading && this.hasChanged)
+        this.postService.fetchPosts(this.posts.length);
+    }
   }
 
 }

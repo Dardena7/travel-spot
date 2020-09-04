@@ -50,7 +50,9 @@ router.post('', multer({storage: storage}).single("picture"), (req, res, next) =
 });
 
 router.get('',(req, res, next) => {
-    Post.find().then(posts => {
+    const postQuery = Post.find().sort({date:-1});
+    postQuery.skip(+req.query.currentAmount).limit(2);
+    postQuery.then(posts => {
         res.status(200).json({
             message: 'Posts fetched with success',
             posts: posts
