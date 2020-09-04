@@ -1,0 +1,41 @@
+<!-- TopNav -->
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+      <button mat-icon-button class='nav-menu'>
+        <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+      </button>
+      <a mat-button [routerLink]="'/'"><h1>Travel Spot</h1></a>
+      <span class="nav-spacer"></span>
+      <div class='nav-links' *ngIf='!user'>
+        <a mat-button [routerLink]="'/sign-in'"> Sign in </a>
+        <a mat-button [routerLink]="'/sign-up'"> Sign up </a>
+      </div>
+      <div class='nav-links' *ngIf='user'>
+        <a mat-button [routerLink]="'/user/account'"> Account </a>
+        <a mat-button (click)="onLogOut()"> Log out </a>
+      </div>
+    </mat-toolbar-row>
+</mat-toolbar>
+  
+<!-- LeftNav -->
+<mat-sidenav-container>
+    <mat-sidenav #sidenav>
+      <mat-nav-list *ngIf='!user'>
+        <a mat-list-item [routerLink]="'/sign-in'"> Sign in </a>
+        <a mat-list-item [routerLink]="'/sign-up'"> Sign up </a>
+      </mat-nav-list>
+      <mat-nav-list *ngIf='user'>
+        <a mat-list-item [routerLink]="'/user/account'"> Account </a>
+        <a mat-list-item (click)="onLogOut()"> Log out </a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <!-- content -->
+    <mat-sidenav-content>
+      <div>
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- footer -->
+<app-footer></app-footer>

@@ -1,0 +1,17 @@
+.nav-spacer {
+    flex: 1 1 auto;
+}
+
+.nav-menu {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    .nav-menu {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+    }
+}

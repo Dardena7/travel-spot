@@ -1,0 +1,177 @@
+/* DISCONNECTED */
+
+main.disconnected {
+    /* Location of the image */
+  background-image: url("/assets/city-bg.jpg");
+  
+  /* Background image is centered vertically and horizontally at all times */
+  background-position: center center;
+  
+  /* Background image doesn't tile */
+  background-repeat: no-repeat;
+  
+  /* Background image is fixed in the viewport so that it doesn't move when 
+     the content's height is greater than the image's height */
+  background-attachment: fixed;
+  
+  /* This is what makes the background image rescale based
+     on the container's size */
+  background-size: cover;
+  
+  /* Set a background color that will be displayed
+     while the background image is loading */
+  background-color: #464646;
+  
+  padding: 200px 0px;
+}
+
+.disconnected .intro {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 75px;
+}
+
+.disconnected h2 {
+    font-size: 30px;
+    font-weight: bold;
+    color: #673ab7;
+}
+
+.disconnected h3 {
+    font-size: 22px;
+    color: #333;
+    font-weight: bold;
+}
+
+.disconnected button {
+    margin-right: 10px;
+}
+
+
+/* CONNECTED */
+
+main.connected {
+    padding: 75px 0px;
+}
+
+.form-panel {
+    width: 80%;
+    max-width: 800px;
+    min-width: 350px;
+    margin: auto;
+}
+
+.form-panel h2 {
+    margin-top: 10px;
+}
+
+.form-panel .spacer {
+    flex: 1 1 auto;
+}
+
+.add-icon {
+    margin-top: 15px;
+    font-size: 30px;
+}
+
+.text-input {
+    width: 100%;
+}
+
+.text-field {
+    width: 100%;
+    margin-top: 30px;
+}
+
+input[type='file'] {
+    display: none;
+}
+
+.image-preview {
+    width: 200px;
+}
+
+.image-preview img {
+    width: 100%;
+}
+
+/* FEED */
+
+.spinner-container {
+    margin: auto;
+    margin-top: 50px;
+    text-align: center;
+}
+
+.lds-dual-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+}
+
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #ffd740;
+    border-color: #ffd740 transparent #ffd740 transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+}
+
+.post-card {
+    width: 80%;
+    max-width: 800px;
+    min-width: 350px;
+    margin: auto;
+    margin-top: 30px;
+    padding: 0px;
+}
+
+.mat-card-title {
+    padding: 15px 15px;
+}
+
+.mat-card-subtitle {
+    padding-left: 15px;
+}
+
+.profil-image {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.feed .author {
+    vertical-align: super;
+}
+
+.travel-image {
+    display: block;
+    margin: auto;
+    width: 80%;
+    max-width: 400px;
+}
+
+.feed p {
+    padding: 30px 30px;
+}
+
+.mat-card>.mat-card-actions:last-child {
+    padding: 0px 20px 20px 30px;
+}
+
+.mat-card-content, .mat-card-actions {
+    text-align: center;
+}

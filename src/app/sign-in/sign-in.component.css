@@ -1,0 +1,17 @@
+main {
+    padding: 150px 0px;
+}
+
+
+.form-card {
+    width: 80%;
+    margin: auto;
+}
+
+p {
+    margin-top: 10px;
+}
+
+.text-input {
+    width: 100%;
+}

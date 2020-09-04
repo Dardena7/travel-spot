@@ -1,0 +1,23 @@
+main {
+    padding: 75px 0px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.profil-card {
+    max-width: 80%;
+    min-width: 350px;
+    padding: 20px;
+    margin: auto;
+  }
+  
+  .profil-header-image {
+    background-image: url('/assets/profil-default.png');
+    background-size: cover;
+  }
+
+  .profil-image {
+      max-width: 200px;
+  }

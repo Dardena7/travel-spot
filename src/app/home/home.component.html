@@ -1,0 +1,95 @@
+<main class='disconnected' *ngIf='!user'>
+    <div class='intro'>
+        <h2>Welcome to Travel Spot</h2>
+        <h3>Share your best city spots, tips and adventures !</h3>
+        <div class="example-button-row">
+            <a  [routerLink]="'/sign-in'"><button mat-raised-button>Sign In</button></a>
+            <a  [routerLink]="'/sign-up'"><button mat-raised-button color="accent">Sign Up</button></a>
+        </div>
+    </div>
+</main>
+
+<main class='connected' *ngIf='user'>
+
+    <!-- Add New Post -->
+
+    <mat-expansion-panel class='form-panel' hideToggle>
+
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h2>Add new Spot !</h2>
+            <span class='spacer'></span>
+            <mat-icon class='add-icon' color='accent'>add_circle</mat-icon>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <form enctype="multipart/form-data" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <mat-form-field class="text-input">
+                <mat-label>Country</mat-label>
+                <input 
+                    matInput
+                    type="text" 
+                    placeholder="Country" 
+                    formControlName="country">
+                <mat-error *ngIf='form.get("country").invalid && form.get("country").touched'>Country required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="text-input">
+                <mat-label>City</mat-label>
+                <input 
+                    matInput
+                    type="text" 
+                    placeholder="City" 
+                    formControlName="city">
+                <mat-error *ngIf='form.get("city").invalid && form.get("city").touched'>City required</mat-error>
+            </mat-form-field>
+
+            <div>
+                <button mat-stroked-button type="button" (click)="fileField.click()">Pick Image</button>
+                <input type="file" #fileField (change)='onChange($event)'>
+                <div class='image-preview' *ngIf='imagePreview && imagePreview != "" && form.get("picture").valid'>
+                    <img [src]="imagePreview" alt="image preview">
+                </div>
+                <mat-error *ngIf='form.get("picture").invalid'>Valid picture required (jpg, jpeg, png) and max 500kb</mat-error>
+            </div>
+
+            <mat-form-field class="text-field" appearance="fill">
+                <mat-label>Your story</mat-label>
+                <textarea matInput placeholder="Describe your adventure" formControlName="description"></textarea>
+                <mat-error *ngIf='form.get("description").invalid && form.get("description").touched'>Description required</mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button color="accent" type="submit" [disabled]="!form.valid">Send</button>
+        </form>
+
+    </mat-expansion-panel>
+
+    <!-- Feed -->
+
+    <div class='feed'>
+        <div class='spinner-container' *ngIf='loading'>
+            <p>Loading posts ...</p>
+            <div class="lds-dual-ring"></div>
+        </div>
+        <mat-card class="post-card" *ngFor='let post of posts'>
+            <mat-card-header>
+                <mat-card-title>
+                    <img class='profil-image' [src]="post.author.picture" alt="Profil Photo">
+                    <span class='author'>{{ post.author.username }}</span>
+                </mat-card-title>
+                <mat-card-subtitle>{{post.country}}, {{post.city}}</mat-card-subtitle>
+            </mat-card-header>
+            <img class='travel-image' [src]="post.picture" alt="Profil Photo">
+            <mat-card-content>
+                <p>
+                    {{ post.description }}
+                </p>
+            </mat-card-content>
+            <mat-card-actions>
+                <button mat-button (click)='onEdit(post.id)'>Edit</button>
+                <button mat-button (click)='onDelete(post.id)'>Delete</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</main>

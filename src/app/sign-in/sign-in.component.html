@@ -1,0 +1,19 @@
+<main>
+    <mat-card class='form-card'>
+        <h2>Sign In</h2>
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+            <mat-form-field class="text-input">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Username" name='username' ngModel>
+            </mat-form-field>
+            
+            <mat-form-field class="text-input">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Password" type="password" name='password' ngModel>
+            </mat-form-field>
+
+            <button mat-raised-button color="accent" type="submit">Send</button>
+        </form>
+        <p>You don't have an account yet ? <a [routerLink]="'/sign-up'">Sign Up</a></p>
+    </mat-card>
+</main>
