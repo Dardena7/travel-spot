@@ -3,13 +3,15 @@
         <h2>Sign In</h2>
         <form (ngSubmit)="onSubmit(form)" #form="ngForm">
             <mat-form-field class="text-input">
-                <mat-label>Username</mat-label>
-                <input matInput placeholder="Username" name='username' ngModel>
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="email" name='email' ngModel required #email='ngModel'>
+                <mat-error *ngIf='!email.valid && email.touched'>Email is required</mat-error>
             </mat-form-field>
             
             <mat-form-field class="text-input">
                 <mat-label>Password</mat-label>
-                <input matInput placeholder="Password" type="password" name='password' ngModel>
+                <input matInput placeholder="Password" type="password" name='password' ngModel required #password='ngModel'>
+                <mat-error *ngIf='!password.valid && password.touched'>Password is required</mat-error>
             </mat-form-field>
 
             <button mat-raised-button color="accent" type="submit">Send</button>

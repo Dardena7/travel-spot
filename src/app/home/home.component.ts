@@ -49,7 +49,9 @@ export class HomeComponent implements OnInit {
         this.posts = posts; 
       }
     );
-    this.postService.fetchPosts(this.posts.length);
+    if (this.user) {
+      this.postService.fetchPosts(this.posts.length);
+    }
 
     this.form = new FormGroup({
       country : new FormControl(null, {validators: [Validators.required]}),

@@ -21,7 +21,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userSub = this.authService.userSubject.subscribe(
       user => {this.user = user;}
     );
-    this.user = this.authService.user;
+    this.authService.autoAuthUser();
+    console.log(this.user);
+    
   }
 
   ngOnDestroy(): void 

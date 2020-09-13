@@ -1,34 +1,13 @@
 const express = require("express");
 const Post = require('../models/post');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
 
-const MIME_TYPES = {
-    'image/png': 'png',
-    'image/jpg': 'jpg',
-    'image/jpeg': 'jpg'
-};
+const storage = require('../utils/multer-storage');
 
-const maxSize = 500; //kb
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        let error = new Error("mime type or size invalid");
-        let isValid = MIME_TYPES[file.mimetype];
-        if (isValid) {
-            error = null;
-        }
-        cb(error, "backend/images");
-    },
-    filename: (req, file, cb) => {
-        const name = file.originalname.toLowerCase().split(".")[0].split(' ').join('-');
-        const ext = MIME_TYPES[file.mimetype];
-        cb(null, name+('-')+Date.now()+('.')+ext);
-    }
-});
-
-router.post('', multer({storage: storage}).single("picture"), (req, res, next) => {
+router.post('', checkAuth, multer({storage: storage}).single("picture"), (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
     const post = new Post({
         author: req.body.author,
@@ -49,7 +28,7 @@ router.post('', multer({storage: storage}).single("picture"), (req, res, next) =
     });
 });
 
-router.get('',(req, res, next) => {
+router.get('', checkAuth, (req, res, next) => {
     const postQuery = Post.find().sort({date:-1});
     postQuery.skip(+req.query.currentAmount).limit(2);
     postQuery.then(posts => {
@@ -63,7 +42,7 @@ router.get('',(req, res, next) => {
     });;
 });
 
-router.get('/:id',(req, res, next) => {
+router.get('/:id', checkAuth, (req, res, next) => {
     Post.findById(req.params.id).then(post => {
         res.status(200).json({
             message: 'Post fetched with success',
@@ -75,7 +54,7 @@ router.get('/:id',(req, res, next) => {
     });
 });
 
-router.delete('/:id',(req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
     Post.deleteOne({_id: req.params.id}).then(response => {
         res.status(200).json({message: 'Post deleted'});
     })
@@ -84,7 +63,7 @@ router.delete('/:id',(req, res, next) => {
     });
 });
 
-router.put('', multer({storage: storage}).single("picture"), (req, res, next) => {
+router.put('', checkAuth, multer({storage: storage}).single("picture"), (req, res, next) => {
     console.log(req.body);
     let picture = req.body.picture;
     console.log(picture);

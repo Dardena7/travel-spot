@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { NgFileValidatorLibModule } from 'angular-file-validator';
 
@@ -27,6 +27,8 @@ import { UserComponent } from './user/user.component';
 import { AccountComponent } from './user/account/account.component';
 import { PostComponent } from './post/post.component';
 import { EditPostComponent } from './post/edit-post/edit-post.component';
+
+import { AuthInterceptor } from './services/auth/auth-interceptor';
 
 
 @NgModule({
@@ -59,7 +61,7 @@ import { EditPostComponent } from './post/edit-post/edit-post.component';
     MatExpansionModule,
     NgFileValidatorLibModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

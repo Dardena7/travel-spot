@@ -2,11 +2,11 @@
     <h2>User Account</h2>
     <mat-card class="profil-card">
         <mat-card-header>
-          <div mat-card-avatar class="profil-header-image"></div>
+          <div mat-card-avatar class="profil-header-image" [ngStyle]="{'background-image': 'url('+user.picture+')'}"></div>
           <mat-card-title>{{ user.username }}</mat-card-title>
           <mat-card-subtitle>Traveler</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image class='profil-image' src="/assets/profil-default.png" alt="Profil Photo">
+        <img mat-card-image class='profil-image' [src]="user.picture" alt="Profil Photo">
         <mat-card-content>
           <p>
             The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.

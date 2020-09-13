@@ -1,1 +1,33 @@
-<p>sign-up works!</p>
+<main>
+    <mat-card class='form-card'>
+        <h2>Sign Up</h2>
+        <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+            <mat-form-field class="text-input">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Username" name='name' ngModel required minlength="3" maxlength="15" #name="ngModel">
+                <mat-error *ngIf='!name.valid && name.touched'>Name must be between 3 and 15 characters</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="text-input">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" name='email' ngModel email required #email="ngModel">
+                <mat-error *ngIf='!email.valid && email.touched'>Email is invalid</mat-error>
+            </mat-form-field>
+            
+            <mat-form-field class="text-input">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Password" type="password" name='password' ngModel required pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,32}$" #password="ngModel">
+                <mat-error *ngIf='!password.valid && password.touched'>Password must contain at least 1 Uppercase, 1 Lowercase, 1 number, 1 special character and between 8 and 32 characters</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="text-input">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput placeholder="Confirm Password" type="password" name='confirmPassword' ngModel required>
+            </mat-form-field>
+            <mat-error *ngIf='!confirmPassword'>Password is not the same !</mat-error>
+            <button mat-raised-button color="accent" type="submit">Send</button>
+        </form>
+        <p>You already have an account ? <a [routerLink]="'/sign-in'">Sign In</a></p>
+    </mat-card>
+</main>
+
