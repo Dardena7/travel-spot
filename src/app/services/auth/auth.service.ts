@@ -69,15 +69,30 @@ export class AuthService
     public autoAuthUser()
     {
         const authInformations = this.getAuthData();
-        if (!authInformations)
+        if (!authInformations){
             return;
+        }
         const now = new Date();
         const expiresIn = authInformations.expirationDate.getTime() - now.getTime();
         if (expiresIn > 0) {
             this._token = authInformations.token;
             this.setAuthTimer(expiresIn / 1000);
+            console.log("exp");
+            this.getUser();
         }
         this.router.navigate(['']);
+    }
+
+    private getUser(): void
+    {
+        this.http.get<any>('http://localhost:3000/api/user/').subscribe(
+            response => {
+                this._user = new User(response.user.id, response.user.name, response.user.picture);
+                console.log("before emit");
+                
+                this._userSubject.next(this._user);
+            }
+        );
     }
 
     private setAuthTimer(expiresIn: number)
@@ -93,8 +108,6 @@ export class AuthService
     {
         const token = localStorage.getItem('token');
         const expirationDate = localStorage.getItem('expirationDate');
-        console.log(token);
-        console.log(expirationDate);
         
         if (!token || !expirationDate) {
             return false;
@@ -109,7 +122,7 @@ export class AuthService
     {
         this._token = response.token;
         const user = response.user;
-        this._user = new User(user.id, user.name, user.password, user.picture);
+        this._user = new User(user.id, user.name, user.picture);
         this._userSubject.next(this._user);
         this.setAuthTimer(response.expiresIn);
         const now = new Date();

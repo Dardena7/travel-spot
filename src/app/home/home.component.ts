@@ -35,8 +35,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.userSub = this.authService.userSubject.subscribe(
-      user => {this.user = user;}
+      user => {this.user = user; this.postService.fetchPosts();}
     );
+    
     this.user = this.authService.user;
     
     this.loadingSub = this.postService.loadSubject.subscribe(
@@ -50,7 +51,7 @@ export class HomeComponent implements OnInit {
       }
     );
     if (this.user) {
-      this.postService.fetchPosts(this.posts.length);
+      this.postService.fetchPosts();
     }
 
     this.form = new FormGroup({
@@ -107,16 +108,16 @@ export class HomeComponent implements OnInit {
     this.postService.deletePost(id); 
   }
 
-  onEdit(id: string)
+  onEdit(id: string, author_id: string)
   {
-    this.router.navigate(['/edit-post', id]);
+    this.router.navigate(['/edit-post', id, author_id]);
   }
 
   @HostListener("window:scroll", [])
   onScroll(): void {
     if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 100) {
       if (!this.loading && this.hasChanged)
-        this.postService.fetchPosts(this.posts.length);
+        this.postService.fetchPosts();
     }
   }
 

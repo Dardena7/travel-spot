@@ -9,6 +9,7 @@ const router = express.Router();
 
 const storage = require('../utils/multer-storage');
 const user = require("../models/user");
+const checkAuth = require("../middleware/check-auth");
 
 router.post('/signup', (req, res, next) => {
     bcrypt.hash(req.body.password, 10).then(hash => {
@@ -79,8 +80,18 @@ router.post('/signin', (req, res, next) => {
         });
 });
 
-router.get('', (req, res, next) => {
-    res.send('signup');
+router.get('', checkAuth, (req, res, next) => {
+    User.findOne({email: req.userData.email})
+    .then(user => {
+        return res.status(201).json({
+            message: "User found !",
+            user: {
+                id: user._id,
+                name: user.name,
+                picture: user.picture
+            }
+        });
+    });
 });
 
 module.exports = router;

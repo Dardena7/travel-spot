@@ -6,7 +6,6 @@ export class User {
 
     constructor(_id: string,
                 _username: string,
-                _password: string,
                 _picture: string) 
     {
         this._id = _id;

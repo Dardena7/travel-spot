@@ -82,8 +82,9 @@
                 </p>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-button (click)='onEdit(post.id)'>Edit</button>
-                <button mat-button (click)='onDelete(post.id)'>Delete</button>
+                <button mat-raised-button color="accent">Comments</button>
+                <button mat-raised-button color="primary" (click)='onEdit(post.id, post.author.id)' *ngIf="post.author.id === user.id">Edit</button>
+                <button mat-raised-button color="warn" (click)='onDelete(post.id)' *ngIf="post.author.id === user.id">Delete</button>
             </mat-card-actions>
         </mat-card>
 

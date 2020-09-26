@@ -18,5 +18,7 @@ export class AccountComponent implements OnInit {
       user => { this.user = user; }
     );
     this.user = this.authService.user;
+    console.log(this.authService.user);
+    
   }
 }

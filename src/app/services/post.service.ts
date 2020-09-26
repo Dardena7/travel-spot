@@ -33,35 +33,36 @@ export class PostService {
 		return this._postSubject;
     }
     
-    public fetchPosts(currentAmount: number): void
+    public fetchPosts(): void
     {
-        const queryParams = `?currentAmount=${currentAmount}`;
+        const queryParams = `?currentAmount=${this._posts.length}`;
         this.loadSubject.next(true);
         this.http.get<{message:string, posts: any[]}>("http://localhost:3000/api/posts"+queryParams)
         .pipe(
             catchError(err => {
                 return throwError(err);
             }),
-            map(postData => {
-                return postData.posts.map(post => {
+            map(response => {
+                return response.posts.map(postData => {
                     return new Post(
-                        post._id,
+                        postData.post._id,
                         new User(
-                            "authorId",
-                            post.author,
-                            "secret",
-                            "assets/profil-default.png"
+                            postData.author.id,
+                            postData.author.name,
+                            postData.author.picture
                         ),
-                        post.country,
-                        post.city,
-                        post.picture,
-                        post.description
+                        postData.post.country,
+                        postData.post.city,
+                        postData.post.picture,
+                        postData.post.description
                     );
                 })
             })
         )
         .subscribe(
             posts => {
+                console.log(posts);
+                
                 setTimeout(() => {
                     this._posts = this._posts.concat(posts);
                     this.postsSubject.next(this._posts.slice());
@@ -71,15 +72,14 @@ export class PostService {
         );
     }
 
-    addPost(author: User, country: string, city: string, picture: File, description: string)
+    addPost(user: User, country: string, city: string, picture: File, description: string)
     {
         const postData = new FormData();
-        postData.append("author", author.username);
         postData.append("country",country);
         postData.append("city",city);
         postData.append("picture",picture);
         postData.append("description",description);
-        this.http.post<{message:string,postId:string,postPicture:string}>("http://localhost:3000/api/posts", postData)
+        this.http.post<{success: boolean,message:string,postId:string,postPicture:string}>("http://localhost:3000/api/posts", postData)
         .pipe(
             catchError(err => {
                 return throwError(err);
@@ -89,7 +89,7 @@ export class PostService {
             response => {
                 const post = new Post(
                     response.postId,
-                    new User("","Alexis","secret", "assets/profil-default.png"),
+                    new User(user.id, user.username, user.picture),
                     country,
                     city,
                     response.postPicture,
@@ -103,7 +103,7 @@ export class PostService {
 
     deletePost(id: string)
     {
-        this.http.delete("http://localhost:3000/api/posts/"+id)
+        this.http.delete<{message: string}>("http://localhost:3000/api/posts/"+id)
         .pipe(
             catchError(err => {
                 return throwError(err);
@@ -111,6 +111,7 @@ export class PostService {
         )
         .subscribe(
             response => { 
+                console.log(response.message);
                 this._posts = this._posts.filter(post => post.id !== id);
                 this._postsSubject.next(this._posts.slice());
             }
@@ -127,23 +128,26 @@ export class PostService {
         postData.append("picture",picture);
         postData.append("description",description);
 
-        this.http.put<{message:string, postPicture:string}>("http://localhost:3000/api/posts", postData)
+        this.http.put<{success: boolean, message:string, postPicture:string}>("http://localhost:3000/api/posts", postData)
         .pipe(
             catchError(err => {
                 return throwError(err);
             })
         )
         .subscribe(
-            response => { 
-                this._post = new Post(id, author, country, city, response.postPicture, description);
-                this._postSubject.next(this._post);
+            response => {
+                console.log(response.message); 
+                if (response.success) {
+                    this._post = new Post(id, author, country, city, response.postPicture, description);
+                    this._postSubject.next(this._post);
+                }
             }
         );
     }
 
     getPost(id: string)
     {
-        this.http.get<{message: string, post: any}>("http://localhost:3000/api/posts/" + id)
+        this.http.get<{message: string, postData: any}>("http://localhost:3000/api/posts/" + id)
         .pipe(
             catchError(err => {
                 this._post = null;
@@ -153,14 +157,14 @@ export class PostService {
         )
         .subscribe(
             response => {
-                const post = response.post; 
+                const post = response.postData.post;
+                const author = response.postData.author; 
                 this._post = new Post(
                     post._id,
                     new User(
-                        "authorId",
-                        post.author,
-                        "secret",
-                        "assets/profil-default.png"
+                        author.id,
+                        author.name,
+                        author.picture
                     ),
                     post.country,
                     post.city,
